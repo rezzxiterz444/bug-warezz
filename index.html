@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REZZ ATACKER</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0d001a, #1a0033);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 500px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(138, 43, 226, 0.5);
+            border: 1px solid #8a2be2;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #8a2be2;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #fff;
+            text-shadow: 0 0 10px #8a2be2, 0 0 20px #8a2be2;
+            margin-bottom: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #d8b6ff;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #8a2be2;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 16px;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #6a0dad, #8a2be2);
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background: linear-gradient(135deg, #8a2be2, #6a0dad);
+            box-shadow: 0 0 15px rgba(138, 43, 226, 0.7);
+            transform: translateY(-2px);
+        }
+        
+        .btn:disabled {
+            background: #555;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .page {
+            display: none;
+        }
+        
+        .active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .spinner {
+            width: 100%;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #8a2be2;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .spinner option {
+            background: #1a0033;
+        }
+        
+        .dialog {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        .dialog.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .dialog-content {
+            background: linear-gradient(135deg, #0d001a, #1a0033);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(138, 43, 226, 0.7);
+            border: 2px solid #8a2be2;
+            max-width: 90%;
+            width: 400px;
+            animation: scaleIn 0.3s ease;
+        }
+        
+        .success-dialog .dialog-content {
+            background: linear-gradient(135deg, #001a00, #003300);
+            border: 2px solid #00cc00;
+            box-shadow: 0 0 30px rgba(0, 204, 0, 0.7);
+        }
+        
+        .success-dialog h2 {
+            color: #00ff00;
+            text-shadow: 0 0 10px #00cc00;
+        }
+        
+        .process-dialog .dialog-content {
+            background: linear-gradient(135deg, #1a0f00, #332200);
+            border: 2px solid #ff9900;
+            box-shadow: 0 0 30px rgba(255, 153, 0, 0.7);
+        }
+        
+        .process-dialog h2 {
+            color: #ff9900;
+            text-shadow: 0 0 10px #ff9900;
+        }
+        
+        @keyframes scaleIn {
+            from { transform: scale(0.9); }
+            to { transform: scale(1); }
+        }
+        
+        .dialog h2 {
+            color: #fff;
+            text-shadow: 0 0 10px #8a2be2;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            font-size: 22px;
+        }
+        
+        .dialog p {
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        .dialog .highlight {
+            color: #d8b6ff;
+            font-weight: bold;
+        }
+        
+        .success-dialog .highlight {
+            color: #90ee90;
+        }
+        
+        .close-dialog {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #6a0dad, #8a2be2);
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .success-dialog .close-dialog {
+            background: linear-gradient(135deg, #008800, #00cc00);
+        }
+        
+        .close-dialog:hover {
+            background: linear-gradient(135deg, #8a2be2, #6a0dad);
+            box-shadow: 0 0 10px rgba(138, 43, 226, 0.7);
+        }
+        
+        .success-dialog .close-dialog:hover {
+            background: linear-gradient(135deg, #00cc00, #008800);
+            box-shadow: 0 0 10px rgba(0, 204, 0, 0.7);
+        }
+        
+        .activity-log {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #8a2be2;
+            border-radius: 5px;
+            padding: 15px;
+            height: 150px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+        }
+        
+        .activity-log p {
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #fff;
+        }
+        
+        .glow-text {
+            text-shadow: 0 0 10px #8a2be2, 0 0 20px #8a2be2, 0 0 30px #8a2be2;
+        }
+        
+        .timer {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 16px;
+            color: #d8b6ff;
+        }
+        
+        .process-bar {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            height: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+            border: 1px solid #8a2be2;
+        }
+        
+        .process-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #6a0dad, #8a2be2);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .code-input {
+            margin-top: 15px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #8a2be2;
+            border-radius: 5px;
+            color: #fff;
+            width: 100%;
+            text-align: center;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Halaman Login -->
+        <div class="page active" id="login-page">
+            <div class="header">
+                <h1 class="glow-text">REZZ ATACKER</h1>
+                <p>FOLOW TIKTOK REZZXITERZ</p>
+            </div>
+            
+            <div class="form-group">
+                <label for="username"><i class="fas fa-user"></i> USERNAME</label>
+                <input type="text" id="username" placeholder="MASUKAN USERNAME">
+            </div>
+            
+            <div class="form-group">
+                <label for="password"><i class="fas fa-lock"></i> PASSWORD</label>
+                <input type="password" id="password" placeholder="MASUKAN PASSWORD">
+            </div>
+            
+            <button class="btn" id="login-btn">LOGIN</button>
+        </div>
+        
+        <!-- Halaman Utama -->
+        <div class="page" id="main-page">
+            <div class="header">
+                <h1 class="glow-text">REZZ ATACKER</h1>
+                <p>MASUKAN NO WA TARGET</p>
+            </div>
+            
+            <div class="form-group">
+                <label for="phone"><i class="fas fa-phone"></i> NOMOR WHATSAPP</label>
+                <input type="text" id="phone" placeholder="CONTOH: 628123456789">
+            </div>
+            
+            <div class="form-group">
+                <label for="bug-type"><i class="fas fa-bug"></i> PILIH TIPE BUG</label>
+                <select class="spinner" id="bug-type">
+                    <option value="">-- PILIH BUG --</option>
+                    <option value="FORCLOSE">FORCLOSE</option>
+                    <option value="DELAY">DELAY</option>
+                    <option value="CHARS">CHARS</option>
+                </select>
+            </div>
+            
+            <button class="btn" id="send-bug">SEND BUG</button>
+            
+            <div class="timer" id="cooldown-timer">
+                TUNGGU <span id="countdown">60</span> DETIK UNTUK MENGIRIM BUG SELANJUTNYA
+            </div>
+            
+            <!-- Log Aktivitas -->
+            <div class="admin-panel">
+                <h3>AKTIVITAS BUG</h3>
+                <div class="activity-log" id="activity-log">
+                    <p>MENUNGGU....</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Dialog Proses -->
+    <div class="dialog process-dialog" id="process-dialog">
+        <div class="dialog-content">
+            <h2 class="glow-text">PROSES BUG</h2>
+            <p>NO WA: <span class="highlight" id="process-number"></span></p>
+            <div class="process-bar">
+                <div class="process-fill" id="process-fill"></div>
+            </div>
+            <p id="process-text">Memulai proses...</p>
+        </div>
+    </div>
+    
+    <!-- Dialog Success -->
+    <div class="dialog success-dialog" id="success-dialog">
+        <div class="dialog-content">
+            <h2 class="glow-text">SUCCESS</h2>
+            <p>BUG BERHASIL DIKIRIM!</p>
+            <p>NO WA: <span class="highlight" id="target-number"></span></p>
+            <p>TIPE: <span class="highlight" id="bug-type-text"></span></p>
+            <p>DEVELOPER <span class="highlight">@REZZ999</span></p>
+            <button class="close-dialog" id="close-dialog">OK</button>
+        </div>
+    </div>
+    
+    <!-- Dialog Kode Verifikasi -->
+    <div class="dialog" id="code-dialog">
+        <div class="dialog-content">
+            <h2 class="glow-text">KODE VERIFIKASI</h2>
+            <p>Masukkan kode verifikasi untuk melanjutkan</p>
+            <input type="text" class="code-input" id="verification-code" placeholder="766">
+            <button class="close-dialog" id="submit-code">SUBMIT</button>
+        </div>
+    </div>
+
+    <script>
+        // Elemen DOM
+        const loginPage = document.getElementById('login-page');
+        const mainPage = document.getElementById('main-page');
+        const processDialog = document.getElementById('process-dialog');
+        const successDialog = document.getElementById('success-dialog');
+        const codeDialog = document.getElementById('code-dialog');
+        const loginBtn = document.getElementById('login-btn');
+        const sendBugBtn = document.getElementById('send-bug');
+        const closeDialogBtn = document.getElementById('close-dialog');
+        const activityLog = document.getElementById('activity-log');
+        const targetNumberSpan = document.getElementById('target-number');
+        const bugTypeTextSpan = document.getElementById('bug-type-text');
+        const processNumberSpan = document.getElementById('process-number');
+        const processFill = document.getElementById('process-fill');
+        const processText = document.getElementById('process-text');
+        const cooldownTimer = document.getElementById('cooldown-timer');
+        const countdownSpan = document.getElementById('countdown');
+        const verificationCodeInput = document.getElementById('verification-code');
+        const submitCodeBtn = document.getElementById('submit-code');
+        
+        // Variabel state
+        let canSendBug = true;
+        let cooldownInterval;
+        let remainingCooldown = 0;
+        const COOLDOWN_TIME = 60; // 60 detik cooldown
+        
+        // Daftar pengguna yang diban
+        const bannedUsers = [];
+        
+        // Sembunyikan cooldown timer awalnya
+        cooldownTimer.style.display = 'none';
+        
+        // Fungsi login
+        loginBtn.addEventListener('click', function() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (username === 'REZZ' && password === 'REZZV1') {
+                // Cek apakah user diban
+                if (bannedUsers.includes(username)) {
+                    showNotification('AKUN ANDA TELAH DIBAN!');
+                    return;
+                }
+                
+                loginPage.classList.remove('active');
+                mainPage.classList.add('active');
+                
+                // Log aktivitas
+                addToActivityLog(`USERNAME ${username} ATACKER`);
+            } else {
+                showNotification('USERNAME ATAU PASSWORD SALAH!');
+            }
+        });
+        
+        // Fungsi kirim bug
+        sendBugBtn.addEventListener('click', function() {
+            // Jika masih dalam cooldown, minta kode verifikasi
+            if (!canSendBug) {
+                codeDialog.classList.add('active');
+                return;
+            }
+            
+            const phone = document.getElementById('phone').value;
+            const bugType = document.getElementById('bug-type').value;
+            
+            if (!phone) {
+                showNotification('HARAP MASUKAN NOMOR TARGET!');
+                return;
+            }
+            
+            if (!bugType) {
+                showNotification('HARAP PILIH TIPE BUG!');
+                return;
+            }
+            
+            // Tampilkan dialog proses
+            processNumberSpan.textContent = phone;
+            processDialog.classList.add('active');
+            
+            // Proses loading 2 detik
+            let progress = 0;
+            const processInterval = setInterval(() => {
+                progress += 50;  
+                processFill.style.width = `${progress}%`;
+                
+                if (progress === 50) processText.textContent = "MENGIRIM BUG...";
+                if (progress === 100) processText.textContent = "SELESAI...";
+                
+                if (progress >= 100) {
+                    clearInterval(processInterval);
+                    processDialog.classList.remove('active');
+                    
+                    // TAMPILKAN DIALOG SUKSES
+                    targetNumberSpan.textContent = phone;
+                    bugTypeTextSpan.textContent = bugType;
+                    successDialog.classList.add('active');
+                    
+                    // LOG AKTIVITAS
+                    addToActivityLog(`BUG ${bugType} DIKIRIM KE ${phone}`);
+                    
+                    // AKTIFKAN COOLDOWN
+                    startCooldown();
+                }
+            }, 1000); // 1 DETIK PER STEP → TOTAL 2 DETIK
+        });
+        
+        // Fungsi mulai cooldown
+        function startCooldown() {
+            canSendBug = false;
+            sendBugBtn.disabled = true;
+            remainingCooldown = COOLDOWN_TIME;
+            cooldownTimer.style.display = 'block';
+            countdownSpan.textContent = remainingCooldown;
+            
+            cooldownInterval = setInterval(() => {
+                remainingCooldown--;
+                countdownSpan.textContent = remainingCooldown;
+                
+                if (remainingCooldown <= 0) {
+                    clearInterval(cooldownInterval);
+                    canSendBug = true;
+                    sendBugBtn.disabled = false;
+                    cooldownTimer.style.display = 'none';
+                }
+            }, 1000);
+        }
+        
+        // Fungsi tutup dialog
+        closeDialogBtn.addEventListener('click', function() {
+            successDialog.classList.remove('active');
+        });
+        
+        // Fungsi verifikasi kode
+        submitCodeBtn.addEventListener('click', function() {
+            const code = verificationCodeInput.value;
+            
+            if (code === '766') {
+                codeDialog.classList.remove('active');
+                verificationCodeInput.value = '';
+                showNotification('KODE VERIFIKASI BERHASIL!');
+                
+                // Reset cooldown
+                clearInterval(cooldownInterval);
+                canSendBug = true;
+                sendBugBtn.disabled = false;
+                cooldownTimer.style.display = 'none';
+            } else {
+                showNotification('KODE VERIFIKASI SALAH!');
+            }
+        });
+        
+        // Fungsi tambah ke log aktivitas
+        function addToActivityLog(message) {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('p');
+            logEntry.innerHTML = `<span class="highlight">[${timestamp}]</span> ${message}`;
+            activityLog.appendChild(logEntry);
+            activityLog.scrollTop = activityLog.scrollHeight;
+        }
+        
+        // Fungsi notifikasi
+        function showNotification(message) {
+            // Buat elemen notifikasi
+            const notification = document.createElement('div');
+            notification.style.position = 'fixed';
+            notification.style.top = '20px';
+            notification.style.right = '20px';
+            notification.style.background = 'linear-gradient(135deg, #6a0dad, #8a2be2)';
+            notification.style.color = 'white';
+            notification.style.padding = '15px';
+            notification.style.borderRadius = '5px';
+            notification.style.boxShadow = '0 0 10px rgba(138, 43, 226, 0.7)';
+            notification.style.zIndex = '1000';
+            notification.style.opacity = '0';
+            notification.style.transform = 'translateX(100px)';
+            notification.style.transition = 'all 0.3s ease';
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // Animasi masuk
+            setTimeout(() => {
+                notification.style.opacity = '1';
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Animasi keluar setelah 3 detik
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateX(100px)';
+                
+                // Hapus elemen setelah animasi selesai
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
